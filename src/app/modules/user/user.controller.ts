@@ -32,6 +32,27 @@ const createUser = catchAsync(
     });
   }
 );
+const updateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    // const token = req.headers.authorization;
+    // const verifiedToken = verifyToken(
+    //   token!,
+    //   envVars.JWT_ACCESS_SECRET
+    // ) as JwtPayload;
+    const verifiedToken = req.user;
+    const payload = req.body;
+
+    const user = await UserServices.updateUser(userId, payload, verifiedToken);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: status.CREATED,
+      message: "User Created Successfully",
+      data: user,
+    });
+  }
+);
 
 const getAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -56,6 +77,7 @@ const getAllUsers = catchAsync(
 export const UserControllers = {
   createUser,
   getAllUsers,
+  updateUser,
 };
 
 // 3 level route matching => controller => service => model => DB
