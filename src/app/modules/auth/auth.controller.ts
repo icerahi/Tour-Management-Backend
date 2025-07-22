@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import status from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
+import passport from "passport";
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
 import { catchAsync } from "../../utils/catchAsync";
@@ -11,7 +12,35 @@ import { AuthServices } from "./auth.service";
 
 const credentialLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const loginInfo = await AuthServices.credentialLogin(req.body);
+    // const loginInfo = await AuthServices.credentialLogin(req.body);
+    passport.authenticate("local", async (error: any, user: any, info: any) => {
+      if (error) {
+        // return next(error)
+        return next(new AppError(401, error));
+      }
+
+      if (!user) {
+        return next(new AppError(401, info.message));
+      }
+      const userTokens = createUserToken(user);
+  
+      // delete user.toObject().password;
+      const { password: pass, ...rest } = user.toObject();
+
+      setAuthCookie(res, userTokens);
+
+      sendResponse(res, {
+        success: true,
+        statusCode: status.OK,
+        message: "User logged successfully",
+        data: {
+          accessToken: userTokens.accessToken,
+          refreshToken: userTokens.refreshToken,
+          user: rest,
+        },
+      });
+    })(req, res, next);
+
     // res.cookie("accessToken", loginInfo.accessToken, {
     //   httpOnly: true,
     //   secure: false,
@@ -21,14 +50,15 @@ const credentialLogin = catchAsync(
     //   secure: false,
     // });
 
-    setAuthCookie(res, loginInfo);
+    // const loginInfo = await AuthServices.credentialLogin(req.body);
+    // setAuthCookie(res, loginInfo);
 
-    sendResponse(res, {
-      success: true,
-      statusCode: status.OK,
-      message: "User logged successfully",
-      data: loginInfo,
-    });
+    // sendResponse(res, {
+    //   success: true,
+    //   statusCode: status.OK,
+    //   message: "User logged successfully",
+    //   data: loginInfo,
+    // });
   }
 );
 

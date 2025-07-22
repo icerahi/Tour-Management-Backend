@@ -1,56 +1,52 @@
 import bcryptjs from "bcryptjs";
-import status, { StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
-import {
-  createNewAccessTokenWithRefreshToken,
-  createUserToken,
-} from "../../utils/userTokens";
-import { IUser } from "../user/user.interface";
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userTokens";
 import { User } from "../user/user.model";
 
-const credentialLogin = async (payload: Partial<IUser>) => {
-  const { email, password } = payload;
-  const isUserExist = await User.findOne({ email });
+// const credentialLogin = async (payload: Partial<IUser>) => {
+//   const { email, password } = payload;
+//   const isUserExist = await User.findOne({ email });
 
-  if (!isUserExist) {
-    throw new AppError(status.BAD_REQUEST, "Email does not exist");
-  }
-  const isPasswordMatch = await bcryptjs.compare(
-    password as string,
-    isUserExist.password as string
-  );
+//   if (!isUserExist) {
+//     throw new AppError(status.BAD_REQUEST, "Email does not exist");
+//   }
+//   const isPasswordMatch = await bcryptjs.compare(
+//     password as string,
+//     isUserExist.password as string
+//   );
 
-  if (!isPasswordMatch) {
-    throw new AppError(status.BAD_REQUEST, "Incorrect Password");
-  }
+//   if (!isPasswordMatch) {
+//     throw new AppError(status.BAD_REQUEST, "Incorrect Password");
+//   }
 
-  //   const jwtPayload = {
-  //     userId: isUserExist._id,
-  //     email: isUserExist.email,
-  //     role: isUserExist.role,
-  //   };
+//   //   const jwtPayload = {
+//   //     userId: isUserExist._id,
+//   //     email: isUserExist.email,
+//   //     role: isUserExist.role,
+//   //   };
 
-  //   const accessToken = generateToken(
-  //     jwtPayload,
-  //     envVars.JWT_ACCESS_SECRET,
-  //     envVars.JWT_ACCESS_EXPIRES
-  //   );
+//   //   const accessToken = generateToken(
+//   //     jwtPayload,
+//   //     envVars.JWT_ACCESS_SECRET,
+//   //     envVars.JWT_ACCESS_EXPIRES
+//   //   );
 
-  //   const refreshToken = generateToken(
-  //     jwtPayload,
-  //     envVars.JWT_REFRESH_SECRET,
-  //     envVars.JWT_REFRESH_EXPIRES
-  //   );
+//   //   const refreshToken = generateToken(
+//   //     jwtPayload,
+//   //     envVars.JWT_REFRESH_SECRET,
+//   //     envVars.JWT_REFRESH_EXPIRES
+//   //   );
 
-  const userToken = createUserToken(isUserExist);
-  const { password: pass, ...rest } = isUserExist.toObject();
-  return {
-    ...userToken,
-    user: rest,
-  };
-};
+//   const userToken = createUserToken(isUserExist);
+//   const { password: pass, ...rest } = isUserExist.toObject();
+//   return {
+//     ...userToken,
+//     user: rest,
+//   };
+// };
 
 const getNewAccessToken = async (refreshToken: string) => {
   const accessToken = await createNewAccessTokenWithRefreshToken(refreshToken);
@@ -82,7 +78,7 @@ const resetPassword = async (
 };
 
 export const AuthServices = {
-  credentialLogin,
+  // credentialLogin,
   getNewAccessToken,
   resetPassword,
 };

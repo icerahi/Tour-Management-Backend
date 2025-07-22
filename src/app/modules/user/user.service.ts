@@ -5,6 +5,7 @@ import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
 import { IAuthProvider, IUser, Role } from "./user.interface";
 import { User } from "./user.model";
+
 const createUser = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
 
