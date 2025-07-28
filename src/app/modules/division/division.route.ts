@@ -18,10 +18,12 @@ router.post(
 
 router.get("/", divisionControllers.getAllDivision);
 
+router.get("/:slug",divisionControllers.getSingleDivision)
+
 router.patch(
   "/:id",
-  validateRequest(updateDivisionZodSchema),
   checkAuth(Role.ADMIN, Role.SUPERADMIN),
+  validateRequest(updateDivisionZodSchema),
   divisionControllers.updateDivision
 );
 

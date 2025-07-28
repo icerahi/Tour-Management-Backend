@@ -6,12 +6,13 @@ import { tourControllers } from "./tour.controller";
 import {
   createTourTypeZodSchema,
   createTourZodSchema,
-  updateTourTypeZodSchema,
   updateTourZodSchema,
 } from "./tour.validation";
+import { divisionControllers } from "../division/division.controller";
 
 const router = Router();
 
+// ------------------- TOUR TYPE ROUTES
 router.post(
   "/create-tour-type",
   validateRequest(createTourTypeZodSchema),
@@ -23,7 +24,7 @@ router.get("/tour-types", tourControllers.getAllTourTypes);
 
 router.patch(
   "/tour-types/:id",
-  validateRequest(updateTourTypeZodSchema),
+  validateRequest(createTourTypeZodSchema),
   checkAuth(Role.ADMIN, Role.SUPERADMIN),
   tourControllers.updateTourType
 );
@@ -34,7 +35,7 @@ router.delete(
   tourControllers.deleteTourType
 );
 
-//tour
+//----------------------------------TOUR ROUTES
 router.post(
   "/create",
   validateRequest(createTourZodSchema),
