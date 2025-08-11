@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { IPayment, PAYMENT_STATUS } from "./payment.interface";
 
 const paymentSchema = new Schema<IPayment>(
@@ -23,8 +23,14 @@ const paymentSchema = new Schema<IPayment>(
       type: Number,
       required: true,
     },
+    paymentGatewayData: {
+      type: Schema.Types.Mixed,
+    },
+    invoiceUrl: { type: String },
   },
   {
     timestamps: true,
   }
 );
+
+export const Payment = model<IPayment>("Payment", paymentSchema);

@@ -6,10 +6,12 @@ const bookingSchema = new Schema<IBooking>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     tour: {
       type: Schema.Types.ObjectId,
       ref: "Tour",
+      required: true,
     },
     payment: {
       type: Schema.Types.ObjectId,
@@ -24,7 +26,6 @@ const bookingSchema = new Schema<IBooking>(
   },
   {
     timestamps: true,
-    versionKey: false,
   }
 );
 
