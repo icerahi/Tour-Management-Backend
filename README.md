@@ -45,7 +45,7 @@ Follow these steps to set up the project locally.
 ### 1\. Clone the Repository
 
 ```bash
-git clone [https://github.com/icerahi/Tour-Management-Backend.git](https://github.com/icerahi/Tour-Management-Backend.git)
+git clone https://github.com/icerahi/Tour-Management-Backend.git
 cd Tour-Management-Backend
 ```
 
